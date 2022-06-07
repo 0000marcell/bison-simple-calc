@@ -1,0 +1,139 @@
+Grammar
+
+    0 $accept: prog $end
+
+    1 prog: stmts
+
+    2 stmts: ε
+    3      | stmt OP stmts
+    4      | stmt stmts
+
+    5 stmt: NUM
+    6     | SEMICOLUMN
+    7     | OTHER
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    NUM <number> (258) 5
+    OP (259) 3
+    SEMICOLUMN (260) 6
+    OTHER (261) 7
+
+
+Nonterminals, with rules where they appear
+
+    $accept (7)
+        on left: 0
+    prog (8)
+        on left: 1
+        on right: 0
+    stmts (9)
+        on left: 2 3 4
+        on right: 1 3 4
+    stmt <number> (10)
+        on left: 5 6 7
+        on right: 3 4
+
+
+State 0
+
+    0 $accept: • prog $end
+
+    NUM         shift, and go to state 1
+    SEMICOLUMN  shift, and go to state 2
+    OTHER       shift, and go to state 3
+
+    $default  reduce using rule 2 (stmts)
+
+    prog   go to state 4
+    stmts  go to state 5
+    stmt   go to state 6
+
+
+State 1
+
+    5 stmt: NUM •
+
+    $default  reduce using rule 5 (stmt)
+
+
+State 2
+
+    6 stmt: SEMICOLUMN •
+
+    $default  reduce using rule 6 (stmt)
+
+
+State 3
+
+    7 stmt: OTHER •
+
+    $default  reduce using rule 7 (stmt)
+
+
+State 4
+
+    0 $accept: prog • $end
+
+    $end  shift, and go to state 7
+
+
+State 5
+
+    1 prog: stmts •
+
+    $default  reduce using rule 1 (prog)
+
+
+State 6
+
+    3 stmts: stmt • OP stmts
+    4      | stmt • stmts
+
+    NUM         shift, and go to state 1
+    OP          shift, and go to state 8
+    SEMICOLUMN  shift, and go to state 2
+    OTHER       shift, and go to state 3
+
+    $default  reduce using rule 2 (stmts)
+
+    stmts  go to state 9
+    stmt   go to state 6
+
+
+State 7
+
+    0 $accept: prog $end •
+
+    $default  accept
+
+
+State 8
+
+    3 stmts: stmt OP • stmts
+
+    NUM         shift, and go to state 1
+    SEMICOLUMN  shift, and go to state 2
+    OTHER       shift, and go to state 3
+
+    $default  reduce using rule 2 (stmts)
+
+    stmts  go to state 10
+    stmt   go to state 6
+
+
+State 9
+
+    4 stmts: stmt stmts •
+
+    $default  reduce using rule 4 (stmts)
+
+
+State 10
+
+    3 stmts: stmt OP stmts •
+
+    $default  reduce using rule 3 (stmts)
